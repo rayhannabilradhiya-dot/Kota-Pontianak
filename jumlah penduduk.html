@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Kependudukan Kota Pontianak</title>
+    <style>
+        body {
+            /* Background seperti gambar statistik BPS */
+            background: linear-gradient(135deg, #1c315e 60%, #376390 100%);
+            background-image: url('sungai kapuass.jpg'); /* ganti sesuai path gambar statistik anda */
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        .container-bg {
+            /* Box putih transparan seperti contoh statistik */
+            background: rgba(255,255,255,0.90);
+            margin: 40px auto;
+            border-radius: 18px;
+            max-width: 900px;
+            box-shadow: 0 0 24px rgba(50,70,100,0.1);
+            padding: 20px 40px 40px 40px;
+        }
+        .header-flex {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .header-flex img {
+            height: 80px;
+            margin-right: 18px;
+        }
+        .header-flex .brand-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #223255;
+            letter-spacing: 1px;
+        }
+        h2 {
+            text-align: center;
+            margin: 28px 0 14px 0;
+            font-size: 2.1em;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            color: #223255;
+        }
+        .desc {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+            font-size: 1.09em;
+            color: #2b3440;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.97);
+            box-shadow: 0 0 8px #ffffff3b;
+        }
+        table, th, td {
+            border: 1px solid #b6c6dd;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: center;
+        }
+        th {
+            background: #124586;
+            color: #fff;
+            font-weight: bold;
+        }
+        .piechart-container {
+            margin: 38px auto 22px auto;
+            text-align: center;
+        }
+        .piechart-container canvas {
+            max-width: 350px;
+            height: auto;
+            margin: auto;
+            background: transparent;
+        }
+        .maps-container {
+            margin: 38px auto 0 auto;
+            text-align: center;
+        }
+        @media (max-width: 700px) {
+            .container-bg {padding: 9px;}
+            table, th, td {font-size:0.97em;}
+        }
+    </style>
+    <!-- Pie chart chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container-bg">
+        <h2>DATA KEPENDUDUKAN KOTA PONTIANAK TAHUN 2023</h2>
+        <div class="desc">
+        </div>
+        <table>
+          <tr>
+            <th>Kecamatan</th>
+            <th>Luas Wilayah (km²)</th>
+            <th>Jumlah Penduduk (ribu)</th>
+            <th>Kepadatan Penduduk</th>
+          </tr>
+          <tr>
+            <td>Pontianak Selatan</td><td>91,290</td><td>10,82</td><td>9.500</td>
+          </tr>
+          <tr>
+            <td>Pontianak Tenggara</td><td>49,176</td><td>7,56</td><td>8.700</td>
+          </tr>
+          <tr>
+            <td>Pontianak Timur</td><td>110,904</td><td>22,39</td><td>5.200</td>
+          </tr>
+          <tr>
+            <td>Pontianak Barat</td><td>149,232</td><td>16,47</td><td>10.800</td>
+          </tr>
+          <tr>
+            <td>Pontianak Kota</td><td>123,586</td><td>9,27</td><td>9.900</td>
+          </tr>
+          <tr>
+            <td>Pontianak Utara</td><td>77,990</td><td>37,22</td><td>4.800</td>
+          </tr>
+        </table>
+        <div class="piechart-container">
+          <h3>Persentase Jumlah Penduduk per Kecamatan</h3>
+          <canvas id="piePontianak" width="320" height="320"></canvas>
+        </div>
+        <div class="maps-container">
+            <h3>Lokasi Kota Pontianak</h3>
+            <iframe
+              src="https://www.google.com/maps?q=-0.0263303,109.3425039&hl=id&z=12&output=embed"
+              width="480"
+              height="350"
+              style="border:0; border-radius:10px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+    <script>
+      // Pie chart untuk persentase jumlah penduduk setiap kecamatan
+      const labels = [
+        'Pontianak Selatan', 'Pontianak Tenggara', 'Pontianak Timur',
+        'Pontianak Barat', 'Pontianak Kota', 'Pontianak Utara'
+      ];
+      const data = [10.82, 7.56, 22.39, 16.47, 9.27, 37.22];
+      const total = data.reduce((a, b) => a + b, 0);
+      const colors = [
+        '#4B84DA','#F7C873','#67C587','#cf77cf','#FF8E7D','#6C86AF'
+      ];
+      new Chart(document.getElementById('piePontianak'), {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data.map(x=>parseFloat(x)),
+            backgroundColor: colors,
+            borderWidth: 1.5,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {position: 'bottom'},
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let val = context.raw;
+                  let percent = ((val/total)*100).toFixed(1);
+                  return context.label + ': ' + val + ' ribu (' + percent + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    </script>
+</body>
+
+<!-- Tambahkan di paling atas di dalam <body> sebelum container-bg -->
+<button onclick="goBack()" id="btnKembali">
+  &#8592; Kembali
+</button>
+
+<style>
+#btnKembali {
+  position: absolute;
+  top: 28px;
+  left: 36px;
+  z-index: 100;
+  background-color: #124586;
+  color: #fff;
+  padding: 13px 32px 13px 18px;
+  font-size: 1.12em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(30,48,80,0.12);
+  font-family: 'Segoe UI','Arial',sans-serif;
+  transition: background 0.18s;
+}
+#btnKembali:hover {
+  background-color: #1c315e;
+}
+body { position: relative; }
+</style>
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+</html>
